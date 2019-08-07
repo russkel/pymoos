@@ -27,10 +27,11 @@
 
 #include <boost/python.hpp>
 
-#include <MOOSGenLib/MOOSGenLib.h>
-#include <MOOSLIB/MOOSCommPkt.h>
-#include <MOOSLIB/MOOSMsg.h>
-#include <MOOSLIB/MOOSGlobalHelper.h>
+#include <MOOS/libMOOS/Utils/MOOSUtils.h>
+#include <MOOS/libMOOS/Comms/MOOSCommPkt.h>
+#include <MOOS/libMOOS/Comms/MOOSMsg.h>
+#include <MOOS/libMOOS/Utils/MOOSPlaybackStatus.h>
+
 #include <assert.h>
 #include <cstring>
 #include <iostream>
@@ -90,7 +91,6 @@ BOOST_PYTHON_MODULE( CMOOSCommPkt )
 	class_<CMOOSCommPkt> ("CMOOSCommPkt", "MOOS Packet Class." )
 		.def( "Serialize", &Serialize )
 		.def( "GetStreamLength", &CMOOSCommPkt::GetStreamLength )
-		.def( "Fill", &CMOOSCommPkt::Fill )
 		.def( "GetBytesRequired", &CMOOSCommPkt::GetBytesRequired )
 	;
 }

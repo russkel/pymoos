@@ -26,10 +26,11 @@
 
 #include <boost/python.hpp>
 
-#include <MOOSGenLib/MOOSGenLib.h>
-#include <MOOSLIB/MOOSMsg.h>
-#include <MOOSLIB/MOOSException.h>
-#include <MOOSLIB/MOOSGlobalHelper.h>
+#include <MOOS/libMOOS/Utils/MOOSUtils.h>
+#include <MOOS/libMOOS/Comms/MOOSMsg.h>
+#include <MOOS/libMOOS/Utils/MOOSException.h>
+#include <MOOS/libMOOS/Utils/MOOSPlaybackStatus.h>
+
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -52,15 +53,15 @@ BOOST_PYTHON_MODULE( CMOOSMsg )
 		.def( "IsType", &CMOOSMsg::IsType )
 		.def( "GetTime", &CMOOSMsg::GetTime )
 		.def( "GetDouble", &CMOOSMsg::GetDouble )
-		.def( "GetString", &CMOOSMsg::GetString )
-		.def( "GetKey", &CMOOSMsg::GetKey )
-		.def( "GetName", &CMOOSMsg::GetName )
-		.def( "GetSource", &CMOOSMsg::GetSource )
-		.def( "GetSourceAux", &CMOOSMsg::GetSourceAux )
-		.def( "SetSourceAux", &CMOOSMsg::SetSourceAux )
-		.def( "GetCommunity", &CMOOSMsg::GetCommunity )
-		.def( "GetAsString", &CMOOSMsg::GetAsString )
+		.def( "GetString", &CMOOSMsg::GetString, return_value_policy<copy_const_reference>())
+		.def( "GetKey", &CMOOSMsg::GetKey, return_value_policy<copy_const_reference>())
+		.def( "GetName", &CMOOSMsg::GetName, return_value_policy<copy_const_reference>())
+		.def( "GetSource", &CMOOSMsg::GetSource, return_value_policy<copy_const_reference>())
+		.def( "GetSourceAux", &CMOOSMsg::GetSourceAux, return_value_policy<copy_const_reference>())
+		.def( "GetCommunity", &CMOOSMsg::GetCommunity, return_value_policy<copy_const_reference>())
+		.def( "GetAsString", &CMOOSMsg::GetAsString)
 		.def( "Trace", &CMOOSMsg::Trace )
+		.def( "SetSourceAux", &CMOOSMsg::SetSourceAux)
 		.def( "SetDouble", &CMOOSMsg::SetDouble )
 		
 		//Attributes

@@ -21,7 +21,7 @@
 //////////////////////////    END_GPL    //////////////////////////////////
 
 #include <boost/python.hpp>
-#include <MOOSLIB/XPCTcpSocket.h>
+#include <MOOS/libMOOS/Comms/XPCTcpSocket.h>
 #ifdef _WIN32
 #else
 #include <sys/time.h>

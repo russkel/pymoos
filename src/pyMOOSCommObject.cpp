@@ -28,11 +28,10 @@
 #include <boost/python.hpp>
 #include <boost/python/exception_translator.hpp>
 
-#include <MOOSGenLib/MOOSGenLib.h>
-#include <MOOSLIB/MOOSCommPkt.h>
-#include <MOOSLIB/XPCTcpSocket.h>
-#include <MOOSLIB/MOOSCommObject.h>
-#include <MOOSLIB/MOOSException.h>
+#include <MOOS/libMOOS/Comms/MOOSCommPkt.h>
+#include <MOOS/libMOOS/Comms/XPCTcpSocket.h>
+#include <MOOS/libMOOS/Comms/MOOSCommObject.h>
+#include <MOOS/libMOOS/Utils/MOOSException.h>
 
 #include <iostream>
 #include <memory>
