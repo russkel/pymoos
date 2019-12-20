@@ -193,21 +193,11 @@ class MOOSCommClient( Thread ):
         if ( self.IsConnected() ):
             print("Already connected")
             return True
-        try:
-            try:
-                self.sock.vConnect( self.host )	
-            except RuntimeError:
-                # let us try a second time with a new socket
-                # FIXME is this a good idea ?
-                del self.sock    
-                self.sock = XPCTcpSocket(9000)
-                self.sock.vConnect( self.host )	
 
-            if ( self.__HandShake() ):
-                return True
-        except:
-            raise # throw the exception
-            return False
+        self.sock.vConnect( self.host )
+
+        if ( self.__HandShake() ):
+            return True
 
     def __DoClientWork( self ):
         "Main I/O loop"
