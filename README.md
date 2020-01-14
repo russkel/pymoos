@@ -2,23 +2,20 @@
 
 Python interface for the Mission Oriented Software Suite (MOOS), developed at Oxford University [http://www.robots.ox.ac.uk/~mobile/MOOS/wiki/pmwiki.php] and hosted on GitHub [https://github.com/themoos]
 
-The pymoos bindings were written by Ian Baldwin and hosted at http://sourceforge.net/projects/pymoos/.
+The pymoos bindings were originally written by Ian Baldwin and hosted at http://sourceforge.net/projects/pymoos/.
 
 ## Dependencies
 
-The pymoos bindings require at a minimum that the core MOOS packages be installed.  They are curently written for the pre-V10 header structure and so MOOS must be compiled with the ENABLE_V10_COMPATIBILITY flag set.
+The pymoos bindings require at a minimum that the core MOOS packages be installed.
 
 	git clone https://github.com/themoos/core-moos.git
 	cd core-moos
 	mkdir build
 	cd build
-	cmake ../ -DENABLE_V10_COMPATIBILITY=ON
+	cmake ..
 	make
 
-Boost Python compiled against Python3 is also required.  Newer Ubuntu installations ship with both 2.7 and 3.2 versions of the Boost Python library.  For older versions (or other OS's) Boost Python must be compiled and linked against Python3.2.  Download the Boost source code and extract to a folder and then:
-
-	./bootstrap.sh --prefix=path/to/installation/prefix --with-python-version=3.2
-	./b2 install
+Boost Python compiled against Python3 is also required.  Newer Ubuntu installations ship with both 2.7 and 3 versions of the Boost Python library.  For older versions (or other OS's) Boost Python must be compiled and linked against Python 3.
 
 ## Installation
 
