@@ -1,12 +1,31 @@
-# PYMOOS - Python binds for MOOS
+# pyMOOS
 
-Python interface for the Mission Oriented Software Suite (MOOS), developed at Oxford University [http://www.robots.ox.ac.uk/~mobile/MOOS/wiki/pmwiki.php] and hosted on GitHub [https://github.com/themoos]
+Python bindings for the [Mission Oriented Software Suite (MOOS)](http://www.robots.ox.ac.uk/~mobile/MOOS/wiki/pmwiki.php), developed at Oxford University and hosted on [GitHub](https://github.com/themoos).
 
-The pymoos bindings were originally written by Ian Baldwin and hosted at http://sourceforge.net/projects/pymoos/.
+
+## Changelog
+
+* **v2020.01**
+  * Fixed CMake to use whatever version of Python 3 available on the system.
+  * Added binary message data type support.
+  * Clean up code (clang-format and black).
+* **v2019.07**
+  * Forked https://github.com/davidhodo/pymoos
+  * Updated to latest MOOS API (10.5.0)
+  * Fixed CMake to find MOOS libs
+  * Updated to Python 3.7
+
 
 ## Dependencies
 
-The pymoos bindings require at a minimum that the core MOOS packages be installed.
+* MOOS Core
+* Python 3
+* Boost libraries (Boost Python compiled against Python 3)
+
+Newer Ubuntu installations ship with both 2.7 and 3 versions of the Boost Python library.  For older versions (or other OS's) Boost Python must be compiled and linked against Python 3.
+
+### Building MOOS
+The pymoos bindings require that the core MOOS packages be installed:
 
 	git clone https://github.com/themoos/core-moos.git
 	cd core-moos
@@ -15,9 +34,8 @@ The pymoos bindings require at a minimum that the core MOOS packages be installe
 	cmake ..
 	make
 
-Boost Python compiled against Python3 is also required.  Newer Ubuntu installations ship with both 2.7 and 3 versions of the Boost Python library.  For older versions (or other OS's) Boost Python must be compiled and linked against Python 3.
 
-## Installation
+## Building and Installation
 
 The pymoos bindings can be downloaded and installed by:
 
@@ -44,3 +62,6 @@ The following code snippet creates a MOOS comm client from Python and connects t
 	import pymoos.MOOSCommClient
 	m = pymoos.MOOSCommClient.MOOSApp()
 	m.Run( "127.0.0.1", 9000, "pymoos_test", 10)
+
+## History 
+The `pymoos` bindings were originally written by [Ian Baldwin](http://sourceforge.net/projects/pymoos/) and then fixed up by [David Hodo](https://github.com/davidhodo/pymoos), but this repository hasn't seen an update in some years.
