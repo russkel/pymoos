@@ -1,13 +1,13 @@
 # pyMOOS
 
-Python bindings for the [Mission Oriented Software Suite (MOOS)](http://www.robots.ox.ac.uk/~mobile/MOOS/wiki/pmwiki.php), developed at Oxford University and hosted on [GitHub](https://github.com/themoos).
+Python 3 bindings for the [Mission Oriented Software Suite (MOOS)](http://www.robots.ox.ac.uk/~mobile/MOOS/wiki/pmwiki.php).
 
 
 ## Changelog
 
 * **v2020.01**
   * Fixed CMake to use whatever version of Python 3 available on the system.
-  * Added binary message data type support.
+  * Added Travis CI
   * Clean up code (clang-format and black).
 * **v2019.07**
   * Forked https://github.com/davidhodo/pymoos
@@ -25,6 +25,7 @@ Python bindings for the [Mission Oriented Software Suite (MOOS)](http://www.robo
 Newer Ubuntu installations ship with both 2.7 and 3 versions of the Boost Python library.  For older versions (or other OS's) Boost Python must be compiled and linked against Python 3.
 
 ### Building MOOS
+
 The pymoos bindings require that the core MOOS packages be installed:
 
 	git clone https://github.com/themoos/core-moos.git
@@ -39,7 +40,7 @@ The pymoos bindings require that the core MOOS packages be installed:
 
 The pymoos bindings can be downloaded and installed by:
 
-	git clone git@github.com:davidhodo/pymoos.git
+	git clone git@github.com:russkel/pymoos.git
 	cd pymoos
 	mkdir build
 	cmake ../

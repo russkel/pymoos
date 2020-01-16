@@ -50,12 +50,13 @@ BOOST_PYTHON_MODULE(CMOOSMsg) {
       .def("IsSkewed", &CMOOSMsg::IsSkewed)
       .def("IsYoungerThan", &CMOOSMsg::IsYoungerThan)
       .def("IsType", &CMOOSMsg::IsType)
+      .def("GetBinaryDataSize", &CMOOSMsg::GetBinaryDataSize)
       .def("GetTime", &CMOOSMsg::GetTime)
       .def("GetDouble", &CMOOSMsg::GetDouble)
       .def("GetString", &CMOOSMsg::GetString,
            return_value_policy<copy_const_reference>())
-      .def("GetBinary", &CMOOSMsg::GetBinary,
-           return_value_policy<copy_const_reference>())
+      //.def("GetBinaryData", &CMOOSMsg::GetBinaryData,
+      //     return_internal_reference<>())
       .def("GetKey", &CMOOSMsg::GetKey,
            return_value_policy<copy_const_reference>())
       .def("GetName", &CMOOSMsg::GetName,

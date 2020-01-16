@@ -1,43 +1,35 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.10)
+project(pymoos HOMEPAGE_URL "https://github.com/russkel/pymoos")
 
-IF(NOT CMAKE_BUILD_TYPE)
-    SET(CMAKE_BUILD_TYPE "DEBUG")
-    #SET(CMAKE_BUILD_TYPE "RELEASE")
-    #SET(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
-    #SET(CMAKE_BUILD_TYPE "MINSIZEREL")
-ENDIF()
+set(CMAKE_PROJECT_VERSION_MAJOR 2020)
+set(CMAKE_PROJECT_VERSION_MINOR 1)
+set(CMAKE_PROJECT_VERSION_PATCH 0)
 
+set(default_build_type "Debug")
 
-FIND_PACKAGE(PythonInterp 3)
-
-if (PYTHONINTERP_FOUND)
-    if (PYTHON_VERSION_MAJOR EQUAL 3)
-        FIND_PACKAGE(Boost COMPONENTS python${PYTHON_VERSION_SUFFIX} REQUIRED)
-        #FIND_PACKAGE(PythonInterp 3)
-        #FIND_PACKAGE(PythonLibs 3 REQUIRED)
-        find_package(Python 3 REQUIRED COMPONENTS Interpreter Development)
-    else()
-        message(FATAL_ERROR "Python 3 not found")
-    endif()
-else()
-    message(FATAL_ERROR "Python 3 not found")
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
+  set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
+      STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-IF(NOT Boost_FOUND)
-    MESSAGE(FATAL_ERROR "Unable to find correct Boost version. Did you set BOOST_ROOT?")
-ENDIF()
+include(FindPython3)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(Boost COMPONENTS python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} REQUIRED)
 
-MESSAGE(STATUS "Python files and libraries will be installed in ${Python_SITELIB}")
+MESSAGE(STATUS "Python: ${Python3_VERSION} SITELIB: ${Python3_SITELIB}")
 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib )
 
-set( CMAKE_SHARED_LIBRARY_SUFFIX ".so" )
-
 IF(WIN32)
     ADD_DEFINITIONS(-DWINDOWS_NT -D_CRT_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_DEPRECATE)
 ENDIF(WIN32)
+
 IF(UNIX)
     ADD_DEFINITIONS(-DUNIX)
     IF("${CMAKE_SYSTEM_NAME}" MATCHES "Darwin")
@@ -56,46 +48,42 @@ IF(UNIX)
     ENDIF("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
 ENDIF(UNIX)
 
-INCLUDE_DIRECTORIES(
-    ${Boost_INCLUDE_DIRS}
-    ${Python_INCLUDE_DIRS}
-    "../")
-
 SET(Boost_USE_STATIC_LIBS OFF)
 SET(Boost_USE_MULTITHREADED ON)
 SET(Boost_USE_STATIC_RUNTIME OFF)
 
-FIND_PACKAGE(MOOS REQUIRED)
-INCLUDE_DIRECTORIES( ${MOOS_INCLUDE_DIRS} /usr/include/MOOS/Compatibility/Core/ )
+FIND_PACKAGE(MOOS 10.5 REQUIRED)
 
-ADD_LIBRARY(CMOOSMsg SHARED src/pyMOOSMsg.cpp )
-TARGET_LINK_LIBRARIES(CMOOSMsg Boost::python${PYTHON_VERSION_SUFFIX} MOOS ${Python_LIBRARIES})
+set(PYMOOS_LIB_DEPS Boost::python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} MOOS::MOOS Python3::Python)
+
+ADD_LIBRARY(CMOOSMsg SHARED src/pyMOOSMsg.cpp)
+TARGET_LINK_LIBRARIES(CMOOSMsg ${PYMOOS_LIB_DEPS})
 SET_TARGET_PROPERTIES(CMOOSMsg PROPERTIES PREFIX "") # remove 'lib' prefix
 
 ADD_LIBRARY(XPCTcpSocket SHARED src/pyXPCTcpSocket.cpp)
-TARGET_LINK_LIBRARIES(XPCTcpSocket Boost::python${PYTHON_VERSION_SUFFIX} MOOS ${Python_LIBRARIES})
+TARGET_LINK_LIBRARIES(XPCTcpSocket ${PYMOOS_LIB_DEPS})
 SET_TARGET_PROPERTIES(XPCTcpSocket PROPERTIES PREFIX "")
 
-ADD_LIBRARY(CMOOSCommPkt SHARED src/pyMOOSCommPkt.cpp  ${CMOOSMsg_SRC} )
-TARGET_LINK_LIBRARIES(CMOOSCommPkt Boost::python${PYTHON_VERSION_SUFFIX} MOOS ${Python_LIBRARIES})
+ADD_LIBRARY(CMOOSCommPkt SHARED src/pyMOOSCommPkt.cpp)
+TARGET_LINK_LIBRARIES(CMOOSCommPkt ${PYMOOS_LIB_DEPS})
 SET_TARGET_PROPERTIES(CMOOSCommPkt PROPERTIES PREFIX "")
 
-SET(CMOOSCommObject_SRC
-    src/pyMOOSCommObject.cpp
-    src/pyMOOSCommPkt.cpp
-    )
-
-ADD_LIBRARY(CMOOSCommObject SHARED ${CMOOSCommObject_SRC} )
-TARGET_LINK_LIBRARIES(CMOOSCommObject Boost::python${PYTHON_VERSION_SUFFIX} MOOS ${Python_LIBRARIES})
+ADD_LIBRARY(CMOOSCommObject SHARED src/pyMOOSCommObject.cpp)
+TARGET_LINK_LIBRARIES(CMOOSCommObject ${PYMOOS_LIB_DEPS})
 SET_TARGET_PROPERTIES(CMOOSCommObject PROPERTIES PREFIX "")
 
 file(COPY python/MOOSCommClient.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-INSTALL(FILES python/MOOSCommClient.py
-		python/__init__.py
-		${CMAKE_BINARY_DIR}/lib/CMOOSCommObject.so
-		${CMAKE_BINARY_DIR}/lib/CMOOSCommPkt.so
-		${CMAKE_BINARY_DIR}/lib/CMOOSMsg.so
-		${CMAKE_BINARY_DIR}/lib/XPCTcpSocket.so
-	    DESTINATION ${Python_SITELIB}/pymoos/
+INSTALL(FILES
+    python/MOOSCommClient.py
+    python/__init__.py
+    ${CMAKE_BINARY_DIR}/lib/CMOOSCommObject.so
+    ${CMAKE_BINARY_DIR}/lib/CMOOSCommPkt.so
+    ${CMAKE_BINARY_DIR}/lib/CMOOSMsg.so
+    ${CMAKE_BINARY_DIR}/lib/XPCTcpSocket.so
+    DESTINATION ${Python3_SITELIB}/pymoos/
 )
+
+set(CPACK_PACKAGE_CONTACT "russ@rw.id.au")
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+include(CPack)

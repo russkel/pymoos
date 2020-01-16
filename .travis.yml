@@ -1,0 +1,36 @@
+language: c++
+dist: bionic
+addons:
+  apt:
+    packages:
+    - build-essential
+    - cmake
+    - ninja-build
+    - python3-dev
+    - libboost-python-dev
+arch:
+- amd64
+os:
+- linux
+compiler:
+- gcc
+script:
+- git clone -b fix-cmake https://github.com/russkel/core-moos.git
+- cd core-moos
+- cmake -GNinja -DCMAKE_BUILD_TYPE=Release .
+- ninja MOOS
+- cd ..
+- mkdir build && cd build
+- cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DMOOS_DIR=../../core-moos -DCPACK_SYSTEM_NAME=ubuntu$(lsb_release -sr)-${TRAVIS_CPU_ARCH} ..
+- ninja
+- cpack -G DEB
+
+deploy:
+  provider: releases
+  api_key:
+    secure: dpHUGF9Rrbsui2u+BpRyni4acLOKHah8fSStS7PaF75c0yMb0KPnrjFE2NvJV6cqUCNKUYFr3qPhIn8if0XWiW570nmm8vc3zaE767RIwfYrKrPK1fBQYSKpeHqfo3AUOTa+94OG/rU7iwFwLzQ41rjCp6M+FtYEzI2nEAaiYtbdIrcambfDOIIjRF73YebN4/E5tB0o+8OTk5m37jSqG0O2ENw0sCEneB3aZoT657Ax5tJEPuxfV3b5VnJlL7lknwYWRX9O+eTICZYSems3uz9bldPRt7eza/jAQAW1PnheiP4kBUCSzjQXAE/xt39P3EKzi3M+mMBRSGX79ca6aBxg8btx3bK3zx/A19ePisv70evDqilECeLQT7QZLwiBFuHfH4RdFe8kR1xcbTDMY2NjLpNiXNbQBkmVJ08oM+bzKCVAFN2OYw5OcQCqkORpJT557FPkc3g1eQhIqfhZZRqcyF8mmqz3zg13LrlFpJKAK6zVI0N2CkQ+IqVt6EeO2kiKlMBruPiEZorlIe8AxxIJWOScC6hRr6RvOs8TIYa41XCSs1ckCXk2Lb8yFHwp6u3TJo3R/jfet7OtL9IbmIC/jQtoYbBEEDIV2RcOaVdSrAODvNAMgREB7zTQedCTU9R6N6H9t2CcGQuW+AvUN4zuWXCnYtt07Qf16syQidQ=
+  file: pymoos-2020.1.0-ubuntu18.04-amd64.deb
+  skip_cleanup: true
+  on:
+    repo: russkel/pymoos
+    branch: travis
