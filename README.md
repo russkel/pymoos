@@ -6,17 +6,21 @@ Python bindings for the [Mission Oriented Software Suite (MOOS)](http://www.robo
 ## Changelog
 
 * **v2020.01**
-  * Fixed CMake to use whatever version of Python 3 available on the system.
-  * Added binary message data type support.
+  * Created PyPI package `pymoos`.
+  * Fixed CMake to use whatever version of Python 3 is available on the system.
   * Clean up code (clang-format and black).
-* **v2019.07**
-  * Forked https://github.com/davidhodo/pymoos
-  * Updated to latest MOOS API (10.5.0)
-  * Fixed CMake to find MOOS libs
-  * Updated to Python 3.7
+  * Updated to latest MOOS API (10.5.0).
+  * Fixed CMake to find MOOS libs.
+  * Forked https://github.com/davidhodo/pymoos.
 
 
-## Dependencies
+## Install via pip
+pyMOOS packages are uploaded to PyPi so they can be installed using pip:
+
+    pip install --user pymoos
+
+## Install from source (Linux)
+### Dependencies
 
 * MOOS Core
 * Python 3
@@ -24,7 +28,7 @@ Python bindings for the [Mission Oriented Software Suite (MOOS)](http://www.robo
 
 Newer Ubuntu installations ship with both 2.7 and 3 versions of the Boost Python library.  For older versions (or other OS's) Boost Python must be compiled and linked against Python 3.
 
-### Building MOOS
+#### Building MOOS
 The pymoos bindings require that the core MOOS packages be installed:
 
 	git clone https://github.com/themoos/core-moos.git
@@ -35,7 +39,7 @@ The pymoos bindings require that the core MOOS packages be installed:
 	make
 
 
-## Building and Installation
+### Building and Installation
 
 The pymoos bindings can be downloaded and installed by:
 
@@ -64,4 +68,4 @@ The following code snippet creates a MOOS comm client from Python and connects t
 	m.Run( "127.0.0.1", 9000, "pymoos_test", 10)
 
 ## History 
-The `pymoos` bindings were originally written by [Ian Baldwin](http://sourceforge.net/projects/pymoos/) and then fixed up by [David Hodo](https://github.com/davidhodo/pymoos), but this repository hasn't seen an update in some years.
+The `pymoos` bindings were originally written by [Ian Baldwin](http://sourceforge.net/projects/pymoos/) and then fixed up by [David Hodo](https://github.com/davidhodo/pymoos), but that repository hasn't seen an update in years.
