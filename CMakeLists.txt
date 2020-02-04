@@ -1,6 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.10)
-project(pymoos HOMEPAGE_URL "https://github.com/russkel/pymoos")
+project(pymoos)
 
+set(CMAKE_PROJECT_HOMEPAGE_URL "https://github.com/russkel/pymoos")
 set(CMAKE_PROJECT_VERSION_MAJOR 2020)
 set(CMAKE_PROJECT_VERSION_MINOR 1)
 set(CMAKE_PROJECT_VERSION_PATCH 0)
