@@ -1,9 +1,9 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.10)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 project(pymoos)
 
 set(CMAKE_PROJECT_HOMEPAGE_URL "https://github.com/russkel/pymoos")
 set(CMAKE_PROJECT_VERSION_MAJOR 2020)
-set(CMAKE_PROJECT_VERSION_MINOR 1)
+set(CMAKE_PROJECT_VERSION_MINOR 2)
 set(CMAKE_PROJECT_VERSION_PATCH 0)
 
 set(default_build_type "Debug")
@@ -17,9 +17,22 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-include(FindPython3)
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-find_package(Boost COMPONENTS python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} REQUIRED)
+if (CMAKE_VERSION LESS 3.12)
+    # to support older cmake versions that don't have FindPython3
+    find_package(PythonInterp 3.6 REQUIRED)
+    find_package(PythonLibs 3.6 REQUIRED)
+    find_package(Boost COMPONENTS python${PYTHON_VERSION_MAJOR} REQUIRED)
+    set(PYMOOS_LIB_DEPS Boost::python${PYTHON_VERSION_MAJOR} MOOS::MOOS ${PYTHON_LIBRARIES})
+    set(Python3_SITELIB "/usr/lib/python3/dist-packages")  # if this doesn't work for you, upgrade your damn cmake!
+    set(Python3_VERSION ${PYTHON_VERSION_STRING})
+    include_directories(${PYTHON_INCLUDE_DIRS})
+else()
+    include(FindPython3)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+    find_package(Boost COMPONENTS python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} REQUIRED)
+    set(PYMOOS_LIB_DEPS Boost::python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} MOOS::MOOS Python3::Python)
+endif()
+
 
 MESSAGE(STATUS "Python: ${Python3_VERSION} SITELIB: ${Python3_SITELIB}")
 
@@ -54,8 +67,6 @@ SET(Boost_USE_MULTITHREADED ON)
 SET(Boost_USE_STATIC_RUNTIME OFF)
 
 FIND_PACKAGE(MOOS 10.5 REQUIRED)
-
-set(PYMOOS_LIB_DEPS Boost::python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} MOOS::MOOS Python3::Python)
 
 ADD_LIBRARY(CMOOSMsg SHARED src/pyMOOSMsg.cpp)
 TARGET_LINK_LIBRARIES(CMOOSMsg ${PYMOOS_LIB_DEPS})

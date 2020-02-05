@@ -33,4 +33,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: russkel/pymoos
-    branch: travis
+    branch: master
