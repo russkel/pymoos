@@ -1,5 +1,7 @@
 # pyMOOS
 
+Please use https://github.com/msis/python-moos if you are just getting started with Python on MOOS. This is a nicer implementation than the old version found here.
+
 Python 3 bindings for the [Mission Oriented Software Suite (MOOS)](http://www.robots.ox.ac.uk/~mobile/MOOS/wiki/pmwiki.php).
 
 
@@ -40,7 +42,7 @@ The pymoos bindings require that the core MOOS packages be installed:
 
 The pymoos bindings can be downloaded and installed by:
 
-	git clone git@github.com:russkel/pymoos.git
+	git clone https://github.com/russkel/pymoos.git
 	cd pymoos
 	mkdir build
 	cmake ../
@@ -60,8 +62,8 @@ If an import error occurs check that the installation directory (usually /usr/lo
 
 The following code snippet creates a MOOS comm client from Python and connects to a database hosted on the local machine.  From a Python3 interpreter, run:
 
-	import pymoos.MOOSCommClient
-	m = pymoos.MOOSCommClient.MOOSApp()
+	from pymoos.MOOSCommClient import MOOSCommClient
+	m = MOOSCommClient()
 	m.Run( "127.0.0.1", 9000, "pymoos_test", 10)
 
 ## History 
